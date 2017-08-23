@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:47:44 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/21 00:08:33 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/23 17:42:21 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ static void	init_bitshifts(t_fractol *d)
 
 void		init_values(t_fractol *d)
 {
-	d->zoom = 1.0f;
-	d->y_offset = SCREEN_HEIGHT / 2;
-	d->x_offset = SCREEN_WIDTH / 2;
+	d->zoom = 280.0f;
+	d->y_offset = 560.0f;
+	d->x_offset = 560.0f;
 	d->l_size_4 = d->l_size / 4;
 	d->keys = k_p_NOT_DRAWN;
-	d->color_mod = 1;
+	d->color_mod = 1.0f;
 	d->iter_nb = 5;
-	d->c = 10000;
+	d->c = 2.0f;
 }
 
 int			main(int ac, char **av)

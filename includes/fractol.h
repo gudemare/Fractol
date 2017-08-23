@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/20 23:18:22 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/23 17:33:23 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct	s_fractol
 	int					endian;
 	int					l_size;
 	int					l_size_4;
-	int					x_offset;
-	int					y_offset;
+	float				x_offset;
+	float				y_offset;
 	int					iter_nb;
 	float				c;
 	float				zoom;
