@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 06:37:01 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/23 23:14:53 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/24 00:28:01 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,8 @@ void	*draw_img_part_by_thread(void *data)
 		i = -1;
 		while (++i < SCREEN_WIDTH)
 		{
-			if ((*((int*)thr_d->d->addr + i + j * thr_d->d->l_size_4)) == 0x000000)
-				pxput(thr_d->d, i, j, get_point_color(thr_d->d->iter_nb, ((i - thr_d->d->x_offset) / thr_d->d->zoom)
-					+ ((j - thr_d->d->y_offset) / thr_d->d->zoom) * I, thr_d->d->c + cos(thr_d->d->x) * thr_d->d->y + sin(thr_d->d->x) * thr_d->d->y * I));
+			pxput(thr_d->d, i, j, get_point_color(thr_d->d->iter_nb, ((i - thr_d->d->x_offset) / thr_d->d->zoom)
+				+ ((j - thr_d->d->y_offset) / thr_d->d->zoom) * I, thr_d->d->c + cos(thr_d->d->x) * thr_d->d->y + sin(thr_d->d->x) * thr_d->d->y * I));
 		}
 	}
 	return (NULL);
@@ -87,19 +86,6 @@ static void	draw_img(t_fractol *d)
 			exit(EXIT_FAILURE);
 		i++;
 	}
-
-/*	if (--process_nb < 0)
-		return ;
-	pid = fork();
-	if (pid == 0)
-	{
-	//	return (draw_img_part(d, process_nb * (SCREEN_HEIGHT / PROCESS_NB), (process_nb + 1) * (SCREEN_HEIGHT / PROCESS_NB)));
-	}
-	else
-	{
-		wait(&pid);
-		draw_img(d, process_nb);
-	}*/
 }
 
 static void	apply_key(t_fractol *d)
@@ -138,12 +124,9 @@ int			fractol_loop(void *param)
 	if ((d->keys))
 	{
 		apply_key(d);
-		if (d->keys & ~(k_p_KP_7 | k_p_KP_9))
-		{
-			mlx_destroy_image(d->mlx, d->img);
-			d->img = mlx_new_image(d->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-			d->addr = mlx_get_data_addr(d->img, &d->bpp, &d->l_size, &d->endian);
-		}
+		mlx_destroy_image(d->mlx, d->img);
+		d->img = mlx_new_image(d->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+		d->addr = mlx_get_data_addr(d->img, &d->bpp, &d->l_size, &d->endian);
 		draw_img(d);
 		mlx_put_image_to_window(d->mlx, d->win, d->img, 0, 0);
 		mlx_string_put(d->mlx, d->win, 10, 10, 0x0000FF, ft_itoa(d->iter_nb));
