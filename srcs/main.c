@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:47:44 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/23 17:42:21 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/23 23:18:36 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ void		init_values(t_fractol *d)
 	d->color_mod = 1.0f;
 	d->iter_nb = 5;
 	d->c = 2.0f;
+	d->x = 0;
+	d->y = 0;
+	d->mouse_change = 0;
 }
 
 int			main(int ac, char **av)
@@ -71,6 +74,8 @@ int			main(int ac, char **av)
 	d.addr = mlx_get_data_addr(d.img, &d.bpp, &d.l_size, &d.endian);
 	init_values(&d);
 	init_bitshifts(&d);
+	mlx_hook(d.win, k_MotionNotify, k_ButtonMotionMask,
+			&handle_mouse_movement, &d);
 	mlx_hook(d.win, k_KeyPress, k_KeyPressMask,
 			&handle_key_press, &d);
 	mlx_hook(d.win, k_KeyRelease, k_KeyReleaseMask,

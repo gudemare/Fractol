@@ -6,13 +6,12 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 06:37:01 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/23 17:52:53 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/23 23:14:53 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> //
-
 #include <stdlib.h>
+#include <pthread.h>
 #include <math.h>
 #include <complex.h>
 #include "fractol.h"
@@ -25,6 +24,8 @@ static int	get_point_color(const int iter_nb, const float complex c,
 	float				real;
 	float				imag;
 
+	if (cabsl(c) > 2.0f)
+		return (0x123456);
 	z = 0 + 0 * I;
 	iter = 0;
 	while (iter++ < iter_nb)
@@ -40,20 +41,65 @@ static int	get_point_color(const int iter_nb, const float complex c,
 	return (0x000000);
 }
 
-static void	draw_img(t_fractol *d)
+void	*draw_img_part_by_thread(void *data)
 {
+	t_thread *thr_d;
 	int		i;
 	int		j;
+	int		jmax;
 
-	j = -1;
-	while (++j < SCREEN_HEIGHT)
+	thr_d = (t_thread *)data;
+	j = thr_d->thread_nb * (SCREEN_HEIGHT / NUM_THREADS) - 1;
+	jmax = (thr_d->thread_nb + 1) * (SCREEN_HEIGHT / NUM_THREADS);
+	while (++j < jmax)
 	{
 		i = -1;
 		while (++i < SCREEN_WIDTH)
-			*((int*)d->addr + i + j * d->l_size_4) = d->color_mod *
-				get_point_color(d->iter_nb, ((i - d->x_offset) / d->zoom)
-						+ ((j - d->y_offset) / d->zoom) * I, d->c);
+		{
+			if ((*((int*)thr_d->d->addr + i + j * thr_d->d->l_size_4)) == 0x000000)
+				pxput(thr_d->d, i, j, get_point_color(thr_d->d->iter_nb, ((i - thr_d->d->x_offset) / thr_d->d->zoom)
+					+ ((j - thr_d->d->y_offset) / thr_d->d->zoom) * I, thr_d->d->c + cos(thr_d->d->x) * thr_d->d->y + sin(thr_d->d->x) * thr_d->d->y * I));
+		}
 	}
+	return (NULL);
+}
+
+static void	draw_img(t_fractol *d)
+{
+	pthread_t	threads[NUM_THREADS];
+	t_thread	threads_data[NUM_THREADS];
+
+	int			i;
+
+	i = 0;
+	while (i < NUM_THREADS)
+	{
+		threads_data[i].thread_nb = i;
+		threads_data[i].d = d;
+		if (pthread_create(&threads[i], NULL, &draw_img_part_by_thread, (void *)&(threads_data[i])))
+			exit(EXIT_FAILURE);
+		i++;
+	}
+	i = 0;
+	while (i < NUM_THREADS)
+	{
+		if (pthread_join(threads[i], NULL))
+			exit(EXIT_FAILURE);
+		i++;
+	}
+
+/*	if (--process_nb < 0)
+		return ;
+	pid = fork();
+	if (pid == 0)
+	{
+	//	return (draw_img_part(d, process_nb * (SCREEN_HEIGHT / PROCESS_NB), (process_nb + 1) * (SCREEN_HEIGHT / PROCESS_NB)));
+	}
+	else
+	{
+		wait(&pid);
+		draw_img(d, process_nb);
+	}*/
 }
 
 static void	apply_key(t_fractol *d)
@@ -92,9 +138,12 @@ int			fractol_loop(void *param)
 	if ((d->keys))
 	{
 		apply_key(d);
-		mlx_destroy_image(d->mlx, d->img);
-		d->img = mlx_new_image(d->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-		d->addr = mlx_get_data_addr(d->img, &d->bpp, &d->l_size, &d->endian);
+		if (d->keys & ~(k_p_KP_7 | k_p_KP_9))
+		{
+			mlx_destroy_image(d->mlx, d->img);
+			d->img = mlx_new_image(d->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+			d->addr = mlx_get_data_addr(d->img, &d->bpp, &d->l_size, &d->endian);
+		}
 		draw_img(d);
 		mlx_put_image_to_window(d->mlx, d->win, d->img, 0, 0);
 		mlx_string_put(d->mlx, d->win, 10, 10, 0x0000FF, ft_itoa(d->iter_nb));

@@ -6,7 +6,7 @@
 #    By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/18 01:13:53 by gudemare          #+#    #+#              #
-#    Updated: 2017/08/20 22:43:42 by gudemare         ###   ########.fr        #
+#    Updated: 2017/08/23 22:06:38 by gudemare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME			=	fractol
 #==============================================================================#
 
 CC				=	clang
-CFLAGS			=	-Wall -Wextra #-Werror
+CFLAGS			=	-Wall -Wextra -O2#-Werror
 
 LIBS			=	libft,mlx
 LIBFT_DIR		=	libft
@@ -27,7 +27,7 @@ HEADERS_LIB		=	libft/includes
 HEADERS_DIR		=	includes/
 HFLAGS			=	-I $(HEADERS_DIR) -I $(HEADERS_LIB) -I $(MLX_DIR)
 
-LFLAGS			=	-lft -L$(LIBFT_DIR) -lmlx -framework OpenGL -framework AppKit -L$(MLX_DIR) -lm
+LFLAGS			=	-lft -L$(LIBFT_DIR) -lmlx -framework OpenGL -framework AppKit -L$(MLX_DIR) -lm -pthread
 SRCS_DIR		=	srcs/
 SRCS_LIST		=	\
 					draw_utils.c \
@@ -75,6 +75,7 @@ WHITE_BG		=	\e[47m
 
 all: $(NAME)
 	@printf "$(MAGENTA)WARNING : -Werror is disabled.\n$(END_GRAPHICS)"
+	@printf "$(MAGENTA)WARNING : -O2 flag present.\n$(END_GRAPHICS)"
 
 $(NAME) : $(LIBS) $(OBJS)
 	@$(CC) $(CFLAGS) $(HFLAGS) $(LFLAGS) $(OBJS) -o $(NAME)

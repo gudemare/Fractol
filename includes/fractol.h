@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/23 17:33:23 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/23 23:22:25 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,38 @@
 # include "mlx.h"
 # include <math.h>
 
-# define SCREEN_WIDTH 2500
-# define SCREEN_HEIGHT 1200
+# define SCREEN_WIDTH 800
+# define SCREEN_HEIGHT 600
+# define NUM_THREADS 4
 
 typedef struct	s_fractol
 {
-	void				*mlx;
-	void				*win;
-	void				*img;
-	char				*addr;
-	int					bpp;
-	int					endian;
-	int					l_size;
-	int					l_size_4;
-	float				x_offset;
-	float				y_offset;
-	int					iter_nb;
-	float				c;
-	float				zoom;
-	float				color_mod;
-	int					keys;
-	int					*bitshifts;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			endian;
+	int			l_size;
+	int			l_size_4;
+	float		x_offset;
+	float		y_offset;
+	int			iter_nb;
+	int			mouse_change;
+	float		x;
+	float		y;
+	float		c;
+	float		zoom;
+	float		color_mod;
+	int			keys;
+	int			*bitshifts;
 }				t_fractol;
+
+typedef struct	s_thread
+{
+	int			thread_nb;
+	t_fractol	*d;
+}				t_thread;
 
 # define MAX_KEYCODE 269
 
@@ -87,8 +97,10 @@ enum			e_keycodes
 	k_CTRL_R = 269,
 	k_KeyPress = 2,
 	k_KeyRelease = 3,
+	k_MotionNotify = 6,
 	k_KeyPressMask = (1L << 0),
-	k_KeyReleaseMask = (1L << 1)
+	k_KeyReleaseMask = (1L << 1),
+	k_ButtonMotionMask = (1L << 13)
 };
 
 enum			e_keys_pressed
@@ -119,6 +131,7 @@ void			init_values(t_fractol *d);
 
 int				fractol_loop(void *param);
 
+int				handle_mouse_movement(int x, int y, void *param);
 int				handle_key_press(int x_event, void *param);
 int				handle_key_release(int x_event, void *param);
 
