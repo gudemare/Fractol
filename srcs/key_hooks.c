@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 07:04:16 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/23 23:20:07 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/24 17:08:37 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ int			handle_mouse_movement(int x, int y, void *param)
 	d = param;
 	if (!(d->mouse_change))
 		return (1);
-	d->x = x / 50.0f;
-	d->y = y / 50.0f;
+	d->z_pow = (cos(x / 100.0f) + sin(x / 100.0f)) * y / 100.0f;
 	d->keys |= k_p_NOT_DRAWN;
 	return (1);
 }

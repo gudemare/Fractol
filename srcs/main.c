@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:47:44 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/24 00:03:12 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/24 17:07:17 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,8 @@ void		init_values(t_fractol *d)
 	d->keys = k_p_NOT_DRAWN;
 	d->color_mod = 1.0f;
 	d->iter_nb = 5;
-	d->c = 2.0f;
-	d->x = 0;
-	d->y = 0;
 	d->mouse_change = 0;
+	d->z_pow = 2.0f;
 }
 
 int			main(int ac, char **av)

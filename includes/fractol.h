@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/24 00:03:11 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/24 17:42:10 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 # define SCREEN_WIDTH 800
 # define SCREEN_HEIGHT 600
-# define NUM_THREADS 4
+# define NUM_THREADS 8
+# define HEIGHT_BY_THREAD SCREEN_HEIGHT / NUM_THREADS
 
 typedef struct	s_fractol
 {
@@ -35,10 +36,8 @@ typedef struct	s_fractol
 	float		y_offset;
 	int			iter_nb;
 	int			mouse_change;
-	float		x;
-	float		y;
-	float		c;
 	float		zoom;
+	float		z_pow;
 	float		color_mod;
 	int			keys;
 	int			*bitshifts;

@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 06:37:01 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/24 00:28:01 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/24 17:44:41 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ static int	get_point_color(const int iter_nb, const float complex c,
 	iter = 0;
 	while (iter++ < iter_nb)
 	{
-		z = cpow(z, z_pow) + c;
+		z = cpow(z, fabs(z_pow)) + c;
 		real = crealf(z);
 		imag = cimagf(z);
 		if (real * real + imag * imag >= 4.0f)
 			break;
 	}
 	if (iter < iter_nb)
-		return (iter * 0x123456);
+		return (iter * 0x012345);
 	return (0x000000);
 }
 
@@ -49,15 +49,15 @@ void	*draw_img_part_by_thread(void *data)
 	int		jmax;
 
 	thr_d = (t_thread *)data;
-	j = thr_d->thread_nb * (SCREEN_HEIGHT / NUM_THREADS) - 1;
-	jmax = (thr_d->thread_nb + 1) * (SCREEN_HEIGHT / NUM_THREADS);
+	j = thr_d->thread_nb * (HEIGHT_BY_THREAD) - 1;
+	jmax = j + 1 + HEIGHT_BY_THREAD;
 	while (++j < jmax)
 	{
 		i = -1;
 		while (++i < SCREEN_WIDTH)
 		{
 			pxput(thr_d->d, i, j, get_point_color(thr_d->d->iter_nb, ((i - thr_d->d->x_offset) / thr_d->d->zoom)
-				+ ((j - thr_d->d->y_offset) / thr_d->d->zoom) * I, thr_d->d->c + cos(thr_d->d->x) * thr_d->d->y + sin(thr_d->d->x) * thr_d->d->y * I));
+				+ ((j - thr_d->d->y_offset) / thr_d->d->zoom) * I, thr_d->d->z_pow));
 		}
 	}
 	return (NULL);
@@ -102,10 +102,6 @@ static void	apply_key(t_fractol *d)
 		d->zoom *= 1.1f;
 	if (d->keys & k_p_KP_M)
 		d->zoom /= 1.1f;
-	if (d->keys & k_p_KP_1)
-		d->c *= 1.1f;
-	if (d->keys & k_p_KP_3)
-		d->c /= 1.1f;
 	if (d->keys & k_p_KEY_A)
 		d->color_mod *= 1.0001f;
 	if (d->keys & k_p_KEY_S)
@@ -129,10 +125,8 @@ int			fractol_loop(void *param)
 		d->addr = mlx_get_data_addr(d->img, &d->bpp, &d->l_size, &d->endian);
 		draw_img(d);
 		mlx_put_image_to_window(d->mlx, d->win, d->img, 0, 0);
-		mlx_string_put(d->mlx, d->win, 10, 10, 0x0000FF, ft_itoa(d->iter_nb));
-		mlx_string_put(d->mlx, d->win, 10, 60, 0x0000FF, ft_itoa(d->x_offset));
-		mlx_string_put(d->mlx, d->win, 10, 100, 0x0000FF, ft_itoa(d->y_offset));
-		mlx_string_put(d->mlx, d->win, 10, 160, 0x0000FF, ft_itoa(d->zoom));
+		mlx_string_put(d->mlx, d->win, 10, 10, 0xFF0000, "Max iteration :");
+		mlx_string_put(d->mlx, d->win, 160, 10, 0xFF0000, ft_itoa(d->iter_nb));
 		d->keys &= ~k_p_NOT_DRAWN;
 	}
 	return (1);
