@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:47:44 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/25 02:01:36 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/25 04:08:06 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static int	init_fract_func(t_fractol *d, char *fract)
 {
 	if (ft_strequ(fract, "mandelbrot"))
 		d->fract_func = &get_value_mandelbrot;
-	if (ft_strequ(fract, "julia"))
+	else if (ft_strequ(fract, "julia"))
 		d->fract_func = &get_value_julia;
-	if (ft_strequ(fract, "burning_ship"))
+	else if (ft_strequ(fract, "burning_ship"))
 		d->fract_func = &get_value_burning_ship;
 	else
 		return (-1);
@@ -58,9 +58,9 @@ static int	init_fract_func(t_fractol *d, char *fract)
 
 void		init_values(t_fractol *d)
 {
-	d->zoom = 280.0f;
-	d->y_offset = 560.0f;
-	d->x_offset = 560.0f;
+	d->zoom = 100.0f;
+	d->y_offset = 3;
+	d->x_offset = 4;
 	d->l_size_4 = d->l_size / 4;
 	d->keys = k_p_NOT_DRAWN;
 	d->color_mod = 1.0f;
