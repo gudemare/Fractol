@@ -6,7 +6,7 @@
 #    By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/18 01:13:53 by gudemare          #+#    #+#              #
-#    Updated: 2017/08/24 00:05:19 by gudemare         ###   ########.fr        #
+#    Updated: 2017/08/25 00:33:38 by gudemare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ LFLAGS			=	-lft -L$(LIBFT_DIR) -lmlx -framework OpenGL -framework AppKit -L$(MLX
 SRCS_DIR		=	srcs/
 SRCS_LIST		=	\
 					draw_utils.c \
+					fractals.c \
 					loop_hook.c \
 					key_hooks.c \
 					main.c

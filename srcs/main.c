@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 02:47:44 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/24 17:07:17 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/25 02:01:36 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,19 @@ static void	init_bitshifts(t_fractol *d)
 	d->bitshifts[k_CTRL_R] = k_p_CTRL_R;
 }
 
+static int	init_fract_func(t_fractol *d, char *fract)
+{
+	if (ft_strequ(fract, "mandelbrot"))
+		d->fract_func = &get_value_mandelbrot;
+	if (ft_strequ(fract, "julia"))
+		d->fract_func = &get_value_julia;
+	if (ft_strequ(fract, "burning_ship"))
+		d->fract_func = &get_value_burning_ship;
+	else
+		return (-1);
+	return (1);
+}
+
 void		init_values(t_fractol *d)
 {
 	d->zoom = 280.0f;
@@ -51,7 +64,7 @@ void		init_values(t_fractol *d)
 	d->l_size_4 = d->l_size / 4;
 	d->keys = k_p_NOT_DRAWN;
 	d->color_mod = 1.0f;
-	d->iter_nb = 5;
+	d->iter_nb = 15;
 	d->mouse_change = 0;
 	d->z_pow = 2.0f;
 }
@@ -60,12 +73,12 @@ int			main(int ac, char **av)
 {
 	t_fractol	d;
 
-	if (ac != 2)
+	if (ac != 2 || init_fract_func(&d, av[1]) != 1)
 	{
-		ft_putstr_fd("usage : ./fractol <map file>\n", 2);
+		ft_putstr_fd("usage : ./fractol [fractal name]\nAvailable fractals :\n\
+\t- mandelbrot\n\t- julia\n\t- burning_ship\n", 2);
 		return (-1);
 	}
-	(void)av;
 	d.mlx = mlx_init();
 	d.win = mlx_new_window(d.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "fractol");
 	d.img = mlx_new_image(d.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);

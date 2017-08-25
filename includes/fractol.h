@@ -6,41 +6,45 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/24 17:42:10 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/25 01:57:39 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
+# include <math.h>
+# include <complex.h>
 # include "libft.h"
 # include "mlx.h"
-# include <math.h>
 
 # define SCREEN_WIDTH 800
 # define SCREEN_HEIGHT 600
 # define NUM_THREADS 8
 # define HEIGHT_BY_THREAD SCREEN_HEIGHT / NUM_THREADS
 
+typedef	int(*fractal)(const int, const float complex, const float complex);
+
 typedef struct	s_fractol
 {
-	void		*mlx;
-	void		*win;
-	void		*img;
-	char		*addr;
-	int			bpp;
-	int			endian;
-	int			l_size;
-	int			l_size_4;
-	float		x_offset;
-	float		y_offset;
-	int			iter_nb;
-	int			mouse_change;
-	float		zoom;
-	float		z_pow;
-	float		color_mod;
-	int			keys;
-	int			*bitshifts;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bpp;
+	int				endian;
+	int				l_size;
+	int				l_size_4;
+	float			x_offset;
+	float			y_offset;
+	int				iter_nb;
+	int				mouse_change;
+	float			zoom;
+	float complex	z_pow;
+	float			color_mod;
+	int				keys;
+	int				*bitshifts;
+	fractal			fract_func;
 }				t_fractol;
 
 typedef struct	s_thread
@@ -136,4 +140,10 @@ int				handle_key_release(int x_event, void *param);
 
 void			pxput(t_fractol *d, int x, int y, int color);
 
+int				get_value_mandelbrot(const int iter_nb, const float complex c,
+		const float complex z_pow);
+int				get_value_julia(const int iter_nb, const float complex c,
+		const float complex z_pow);
+int				get_value_burning_ship(const int iter_nb, const float complex c,
+		const float complex z_pow);
 #endif
