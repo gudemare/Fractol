@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 00:23:49 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/26 06:12:18 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/26 07:57:25 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int		get_value_mandelbrot(const int iter_nb, const DOUBLE_COMPLEX c,
 	while (iter++ < iter_nb)
 	{
 		z = z * z + c;
-		real = crealf(z);
-		imag = cimagf(z);
+		real = creal(z);
+		imag = cimag(z);
 		if (real * real + imag * imag >= 4.0f)
 			return (iter * 0x012345);
 	}
@@ -49,8 +49,8 @@ int		get_value_julia(const int iter_nb, const DOUBLE_COMPLEX c,
 	while (iter++ < iter_nb)
 	{
 		z = z * z + z_pow;
-		real = crealf(z);
-		imag = cimagf(z);
+		real = creal(z);
+		imag = cimag(z);
 		if (real * real + imag * imag >= 4.0f)
 			return (iter * 0x012345);
 	}
@@ -65,15 +65,15 @@ int		get_value_burning_ship(const int iter_nb, const DOUBLE_COMPLEX c,
 	double				real;
 	double				imag;
 
-	if (cabsl(c) > 2.0f)
+	if (cabs(c) > 2.0f)
 		return (0x012345);
 	z = 0;
 	iter = 0;
 	(void)z_pow;
 	while (iter++ < iter_nb)
 	{
-		real = fabs(crealf(z));
-		imag = fabs(cimagf(z));
+		real = fabs(creal(z));
+		imag = fabs(cimag(z));
 		z = real + I * imag;
 		z = z * z + c;
 		if (real * real + imag * imag >= 4.0f)
