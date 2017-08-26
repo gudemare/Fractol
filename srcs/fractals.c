@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 00:23:49 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/25 06:04:46 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/26 06:12:18 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 #include <complex.h>
 #include "fractol.h"
 
-int		get_value_mandelbrot(const int iter_nb, const float complex c,
-		const float complex z_pow)
+int		get_value_mandelbrot(const int iter_nb, const DOUBLE_COMPLEX c,
+		const DOUBLE_COMPLEX z_pow)
 {
-	float complex		z;
+	DOUBLE_COMPLEX		z;
 	int					iter;
-	float				real;
-	float				imag;
+	double				real;
+	double				imag;
 
 	z = 0 + 0 * I;
 	iter = 0;
+	(void)z_pow;
 	while (iter++ < iter_nb)
 	{
-		z = cpow(z, z_pow) + c;
+		z = z * z + c;
 		real = crealf(z);
 		imag = cimagf(z);
 		if (real * real + imag * imag >= 4.0f)
@@ -35,13 +36,13 @@ int		get_value_mandelbrot(const int iter_nb, const float complex c,
 	return (0x000000);
 }
 
-int		get_value_julia(const int iter_nb, const float complex c,
-		const float complex z_pow)
+int		get_value_julia(const int iter_nb, const DOUBLE_COMPLEX c,
+		const DOUBLE_COMPLEX z_pow)
 {
-	float complex		z;
+	DOUBLE_COMPLEX		z;
 	int					iter;
-	float				real;
-	float				imag;
+	double				real;
+	double				imag;
 
 	z = c;
 	iter = 0;
@@ -56,13 +57,13 @@ int		get_value_julia(const int iter_nb, const float complex c,
 	return (0x000000);
 }
 
-int		get_value_burning_ship(const int iter_nb, const float complex c,
-		const float complex z_pow)
+int		get_value_burning_ship(const int iter_nb, const DOUBLE_COMPLEX c,
+		const DOUBLE_COMPLEX z_pow)
 {
-	float complex		z;
+	DOUBLE_COMPLEX		z;
 	int					iter;
-	float				real;
-	float				imag;
+	double				real;
+	double				imag;
 
 	if (cabsl(c) > 2.0f)
 		return (0x012345);

@@ -6,7 +6,7 @@
 #    By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/18 01:13:53 by gudemare          #+#    #+#              #
-#    Updated: 2017/08/25 00:33:38 by gudemare         ###   ########.fr        #
+#    Updated: 2017/08/26 05:58:17 by gudemare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME			=	fractol
 #==============================================================================#
 
 CC				=	clang
-CFLAGS			=	-Wall -Wextra#-Werror
+CFLAGS			=	-Wall -Wextra -Werror
 
 LIBS			=	libft,mlx
 LIBFT_DIR		=	libft
@@ -30,7 +30,6 @@ HFLAGS			=	-I $(HEADERS_DIR) -I $(HEADERS_LIB) -I $(MLX_DIR)
 LFLAGS			=	-lft -L$(LIBFT_DIR) -lmlx -framework OpenGL -framework AppKit -L$(MLX_DIR) -lm
 SRCS_DIR		=	srcs/
 SRCS_LIST		=	\
-					draw_utils.c \
 					fractals.c \
 					loop_hook.c \
 					key_hooks.c \
@@ -75,7 +74,6 @@ WHITE_BG		=	\e[47m
 .PHONY : all norme clean fclean re debug debug_lib debug_re project_re $(LIBS) $(SUBPROJECTS)
 
 all: $(NAME)
-	@printf "$(MAGENTA)WARNING : -Werror is disabled.\n$(END_GRAPHICS)"
 
 $(NAME) : $(LIBS) $(OBJS)
 	@$(CC) $(CFLAGS) $(HFLAGS) $(LFLAGS) $(OBJS) -o $(NAME)

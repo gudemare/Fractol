@@ -6,15 +6,20 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 06:37:01 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/25 06:03:15 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/26 06:32:53 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <pthread.h>
 #include <math.h>
-#include <complex.h>
 #include "fractol.h"
+
+static void	pxput(t_fractol *d, int x, int y, int color)
+{
+	if (x >= 0 && x < SCREEN_WIDTH && y >= 0 & y < SCREEN_HEIGHT)
+		*((int*)d->addr + x + y * d->l_size_4) = color;
+}
 
 static void	*draw_img_part_by_thread(void *data)
 {
@@ -62,17 +67,21 @@ static void	draw_img(t_fractol *d)
 static void	apply_key(t_fractol *d)
 {
 	if (d->keys & k_p_LEFT)
-		d->x_offset += (SCREEN_WIDTH / 10) / d->zoom;
+		d->x_offset += (SCREEN_WIDTH / 50) / d->zoom;
 	if (d->keys & k_p_RIGHT)
-		d->x_offset -= (SCREEN_WIDTH / 10) / d->zoom;
+		d->x_offset -= (SCREEN_WIDTH / 50) / d->zoom;
 	if (d->keys & k_p_UP)
-		d->y_offset += (SCREEN_HEIGHT / 10) / d->zoom;
+		d->y_offset += (SCREEN_HEIGHT / 50) / d->zoom;
 	if (d->keys & k_p_DOWN)
-		d->y_offset -= (SCREEN_HEIGHT / 10) / d->zoom;
-	if (d->keys & k_p_KP_P)
-		d->zoom *= 1.1f;
-	if (d->keys & k_p_KP_M)
-		d->zoom /= 1.1f;
+		d->y_offset -= (SCREEN_HEIGHT / 25) / d->zoom;
+	if (d->keys & (k_p_MOUSE_LEFT | k_p_MOUSE_RIGHT))
+	{
+		d->x_offset -= d->mouse_x / d->zoom;
+		d->y_offset -= d->mouse_y / d->zoom;
+		d->zoom *= (d->keys & (k_p_MOUSE_LEFT)) ? 1.1f : 1.0f / 1.1f;
+		d->x_offset += d->mouse_x / d->zoom;
+		d->y_offset += d->mouse_y / d->zoom;
+	}
 	if (d->keys & k_p_KEY_A)
 		d->color_mod *= 1.05f;
 	if (d->keys & k_p_KEY_S)

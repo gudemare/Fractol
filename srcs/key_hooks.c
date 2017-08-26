@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/11 07:04:16 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/25 00:44:22 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/26 06:32:53 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,42 @@
 #include <math.h>
 #include "fractol.h"
 
-static void	quit(t_fractol *d)
+int			handle_button_release(int button, int x, int y, void *param)
 {
-	mlx_destroy_image(d->mlx, d->img);
-	mlx_destroy_window(d->mlx, d->win);
-	free(d->bitshifts);
-	ft_putstr("Goodbye\n");
-	exit(EXIT_SUCCESS);
+	t_fractol *d;
+
+	(void)x;
+	(void)y;
+	if (button == k_RightButton || button == k_LeftButton)
+	{
+		d = (t_fractol *)param;
+		d->keys &= ~(d->bitshifts[button + 1]);
+	}
+	return (1);
+}
+
+int			handle_button_press(int button, int x, int y, void *param)
+{
+	t_fractol *d;
+
+	d = (t_fractol *)param;
+	if (button == k_RightButton || button == k_LeftButton)
+	{
+		d->mouse_x = x;
+		d->mouse_y = y;
+		d->keys |= d->bitshifts[button + 1];
+		d->keys |= k_p_NOT_DRAWN;
+	}
+	else if (button == k_ScrollDown || button == k_ScrollUp)
+	{
+		d->x_offset -= x / d->zoom;
+		d->y_offset -= y / d->zoom;
+		d->zoom *= (button == k_ScrollUp) ? 1.1f : 1.0f / 1.1f;
+		d->x_offset += x / d->zoom;
+		d->y_offset += y / d->zoom;
+		d->keys |= k_p_NOT_DRAWN;
+	}
+	return (1);
 }
 
 int			handle_mouse_movement(int x, int y, void *param)

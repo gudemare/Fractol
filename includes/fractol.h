@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/25 01:57:39 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/08/26 06:35:26 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@
 # include "libft.h"
 # include "mlx.h"
 
+# define DOUBLE_COMPLEX double complex
 # define SCREEN_WIDTH 800
 # define SCREEN_HEIGHT 600
 # define NUM_THREADS 8
 # define HEIGHT_BY_THREAD SCREEN_HEIGHT / NUM_THREADS
 
-typedef	int(*fractal)(const int, const float complex, const float complex);
+typedef	int	(*t_fractal)(const int, const DOUBLE_COMPLEX, const DOUBLE_COMPLEX);
 
 typedef struct	s_fractol
 {
@@ -35,16 +36,18 @@ typedef struct	s_fractol
 	int				endian;
 	int				l_size;
 	int				l_size_4;
-	float			x_offset;
-	float			y_offset;
+	double			x_offset;
+	double			y_offset;
 	int				iter_nb;
 	int				mouse_change;
-	float			zoom;
-	float complex	z_pow;
-	float			color_mod;
+	double			zoom;
+	DOUBLE_COMPLEX	z_pow;
+	double			color_mod;
 	int				keys;
 	int				*bitshifts;
-	fractal			fract_func;
+	int				mouse_x;
+	int				mouse_y;
+	t_fractal		fract_func;
 }				t_fractol;
 
 typedef struct	s_thread
@@ -57,9 +60,8 @@ typedef struct	s_thread
 
 enum			e_keycodes
 {
-	k_KEY_S = 1,
 	k_KEY_A = 0,
-	k_KEY_F = 3,
+	k_KEY_S = 1,
 	k_KEY_G = 5,
 	k_KEY_C = 8,
 	k_KEY_B = 11,
@@ -98,18 +100,33 @@ enum			e_keycodes
 	k_SHIFT_L = 257,
 	k_SHIFT_R = 258,
 	k_CTRL_R = 269,
+};
+
+enum			e_mousecodes
+{
+	k_LeftButton = 1,
+	k_RightButton = 2,
+	k_ScrollUp = 4,
+	k_ScrollDown = 5
+};
+enum			e_events
+{
 	k_KeyPress = 2,
 	k_KeyRelease = 3,
+	k_ButtonPress = 4,
+	k_ButtonRelease = 5,
 	k_MotionNotify = 6,
 	k_KeyPressMask = (1L << 0),
 	k_KeyReleaseMask = (1L << 1),
+	k_ButtonPressMask = (1L << 2),
+	k_ButtonReleaseMask = (1L << 3),
 	k_ButtonMotionMask = (1L << 13)
 };
 
 enum			e_keys_pressed
 {
-	k_p_KEY_S = 1 << 1,
-	k_p_KEY_A = 1 << 2,
+	k_p_KEY_A = 1 << 1,
+	k_p_KEY_S = 1 << 2,
 	k_p_KP_P = 1 << 3,
 	k_p_KP_M = 1 << 4,
 	k_p_KP_1 = 1 << 5,
@@ -125,25 +142,25 @@ enum			e_keys_pressed
 	k_p_RIGHT = 1 << 15,
 	k_p_DOWN = 1 << 16,
 	k_p_UP = 1 << 17,
-	k_p_SHIFT_R = 1 << 18,
-	k_p_CTRL_R = 1 << 19,
+	k_p_MOUSE_LEFT = 1 << 18,
+	k_p_MOUSE_RIGHT = 1 << 19,
 	k_p_NOT_DRAWN = 1 << 32
 };
 
 void			init_values(t_fractol *d);
-
 int				fractol_loop(void *param);
+void			quit(t_fractol *d);
 
+int				handle_button_release(int button, int x, int y, void *param);
+int				handle_button_press(int button, int x, int y, void *param);
 int				handle_mouse_movement(int x, int y, void *param);
 int				handle_key_press(int x_event, void *param);
 int				handle_key_release(int x_event, void *param);
 
-void			pxput(t_fractol *d, int x, int y, int color);
-
-int				get_value_mandelbrot(const int iter_nb, const float complex c,
-		const float complex z_pow);
-int				get_value_julia(const int iter_nb, const float complex c,
-		const float complex z_pow);
-int				get_value_burning_ship(const int iter_nb, const float complex c,
-		const float complex z_pow);
+int				get_value_mandelbrot(const int iter_nb,
+		const DOUBLE_COMPLEX c, const DOUBLE_COMPLEX z_pow);
+int				get_value_julia(const int iter_nb,
+		const DOUBLE_COMPLEX c, const DOUBLE_COMPLEX z_pow);
+int				get_value_burning_ship(const int iter_nb,
+		const DOUBLE_COMPLEX c, const DOUBLE_COMPLEX z_pow);
 #endif
