@@ -6,7 +6,7 @@
 /*   By: gudemare <gudemare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/20 22:33:45 by gudemare          #+#    #+#             */
-/*   Updated: 2017/08/26 06:35:26 by gudemare         ###   ########.fr       */
+/*   Updated: 2017/09/20 18:24:05 by gudemare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define DOUBLE_COMPLEX double complex
 # define SCREEN_WIDTH 800
 # define SCREEN_HEIGHT 600
-# define NUM_THREADS 8
+# define NUM_THREADS 60
 # define HEIGHT_BY_THREAD SCREEN_HEIGHT / NUM_THREADS
 
 typedef	int	(*t_fractal)(const int, const DOUBLE_COMPLEX, const DOUBLE_COMPLEX);
